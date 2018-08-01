@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	string SensorPort;	
 	int SensorBaudrate;
 	
-	n.param<std::string>("serial_port", SensorPort, "/dev/ttyUSB0");
+        n.param<std::string>("serial_port", SensorPort, "/dev/vectornav");
 	n.param<int>("serial_baud", SensorBaudrate, 115200);
 	
   ROS_INFO("Connecting to : %s @ %d Baud", SensorPort.c_str(), SensorBaudrate);
