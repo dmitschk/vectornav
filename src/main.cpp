@@ -70,36 +70,36 @@ int main(int argc, char *argv[])
 	
         n.param<std::string>("serial_port", SensorPort, "/dev/vectornav");
 	n.param<int>("serial_baud", SensorBaudrate, 115200);
-	
+
   ROS_INFO("Connecting to : %s @ %d Baud", SensorPort.c_str(), SensorBaudrate);
 
-	// Create a VnSensor object and connect to sensor
-	VnSensor vs;
-	vs.connect(SensorPort, SensorBaudrate);
+  // Create a VnSensor object and connect to sensor
+  VnSensor vs;
+  vs.connect(SensorPort, SensorBaudrate);
 
-	// Query the sensor's model number.
-	string mn = vs.readModelNumber();	
+  // Query the sensor's model number.
+  string mn = vs.readModelNumber();
   ROS_INFO("Model Number: %s", mn.c_str());
 
-	// Set Data output Freq [Hz]
-	int async_output_rate;
-	n.param<int>("async_output_rate", async_output_rate, 40);
-	vs.writeAsyncDataOutputFrequency(async_output_rate);
-  
-  
-	// Configure binary output message
-	BinaryOutputRegister bor(
-		ASYNCMODE_PORT1,
-		1000 / async_output_rate,  // update rate [ms]
-		COMMONGROUP_TIMESTARTUP | COMMONGROUP_QUATERNION | COMMONGROUP_ANGULARRATE | COMMONGROUP_POSITION | COMMONGROUP_ACCEL | COMMONGROUP_MAGPRES,
-		TIMEGROUP_NONE,
-		IMUGROUP_NONE,
-		GPSGROUP_NONE,
-		ATTITUDEGROUP_NONE,
-		INSGROUP_NONE);
+  // Set Data output Freq [Hz]
+  int async_output_rate;
+  n.param<int>("async_output_rate", async_output_rate, 40);
+  vs.writeAsyncDataOutputFrequency(async_output_rate);
 
-	vs.writeBinaryOutput1(bor);
-	vs.registerAsyncPacketReceivedHandler(NULL, BinaryAsyncMessageReceived);
+
+  // Configure binary output message
+  BinaryOutputRegister bor(
+    ASYNCMODE_PORT1,
+    1000 / async_output_rate,  // update rate [ms]
+    COMMONGROUP_TIMESTARTUP | COMMONGROUP_QUATERNION | COMMONGROUP_ANGULARRATE | COMMONGROUP_POSITION | COMMONGROUP_ACCEL | COMMONGROUP_MAGPRES,
+    TIMEGROUP_NONE,
+    IMUGROUP_NONE,
+    GPSGROUP_NONE,
+    ATTITUDEGROUP_NONE,
+    INSGROUP_NONE);
+
+  vs.writeBinaryOutput1(bor);
+  vs.registerAsyncPacketReceivedHandler(NULL, BinaryAsyncMessageReceived);
 
 
   // You spin me right round, baby
@@ -109,9 +109,9 @@ int main(int argc, char *argv[])
 
 
   // Node has been terminated
-	vs.unregisterAsyncPacketReceivedHandler();
-	vs.disconnect();
-	return 0;
+  vs.unregisterAsyncPacketReceivedHandler();
+  vs.disconnect();
+  return 0;
 }
 
 
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 void BinaryAsyncMessageReceived(void* userData, Packet& p, size_t index)
 {
 	
-	if (p.type() == Packet::TYPE_BINARY)
+  //if (p.type() == Packet::TYPE_BINARY)
 	{
 		// First make sure we have a binary packet type we expect since there
 		// are many types of binary output types that can be configured.
